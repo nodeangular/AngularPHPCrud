@@ -1,0 +1,93 @@
+
+
+
+
+<div *ngIf="error" class="alert alert-danger">{{error}}</div>
+<div *ngIf="success" class="alert alert-success">{{success}}</div>
+
+
+<h1>Category List</h1>
+<div id="theList">
+  <div class="list-group">
+    <div *ngFor="let items of cats;let i = index;">
+      
+      <div class="col-4" style="float:left">
+        <input type="text" [(ngModel)]="cats[i].catName"
+               class="form-control" required
+               pattern="^[a-zA-Z]+$"
+               #catName="ngModel"
+               [ngClass]="{ 'is-invalid': catName.touched && catName.invalid }">
+      </div>
+      <div class="col-4" style="float:left">
+        <input type="text"
+               [(ngModel)]="cats[i].catDesc"
+               class="form-control"
+               required
+               #catDesc="ngModel"
+               [ngClass]="{ 'is-invalid': catDesc.touched && catDesc.invalid }">
+      </div>
+      <div class="col-4" style="float:left">
+        <input type="button"
+               value="Update"
+               class="btn btn-success btn-sm"
+               [disabled]="catName.invalid || catDesc.invalid"
+               (click)="updateCats(catName, catDesc, items.id)">
+        &nbsp;
+        <input type="button"
+               value="Delete"
+               class="btn btn-danger btn-sm"
+               (click)="deleteCats(items.id)">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h2> Add Categories Form</h2>
+
+
+<div id="theForm">
+  
+  <form #f="ngForm" name="theForm" (submit)="addCats(f)">
+
+      <select [(ngModel)]="cat.parent_id" name="parent_id" id="parent_id"  #parent_id="ngModel">
+          <option [ngValue]="0">Select Category</option>
+          <option *ngFor="let item of cats;let i = index" [value]="cats[i].id">{{cats[i].catName}}</option>
+      </select>
+        
+
+    <div class="form-group">
+      <label>Model</label>
+      <input type="text" class="form-control" name="catName"
+[(ngModel)]="cat.catName"
+            #catName="ngModel"
+            required
+            pattern="^[a-zA-Z]+$">
+      <span class="help-block danger" *ngIf="catName.errors?.required && catName.touched">
+        The model name is required
+      </span>
+      <span class="help-block danger" *ngIf="catName.errors?.pattern && catName.touched">
+        The model name can only contain the letters a-z or A-Z
+      </span>
+    </div>
+  
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text"
+            class="form-control"
+            name="catDesc"
+            required
+            [(ngModel)]="cat.catDesc"
+            #catDesc="ngModel">
+      <span class="help-block danger" *ngIf="catDesc.errors?.required && catDesc.touched">
+        The description is required
+      </span>
+    </div>
+  
+    <button
+        class="btn btn-primary btn-sm"
+        [disabled]="f.invalid">Add</button>
+  </form>
+  
+  

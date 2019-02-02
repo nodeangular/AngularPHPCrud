@@ -1,0 +1,110 @@
+
+<div *ngIf="error" class="alert alert-danger">{{error}}</div>
+<div *ngIf="success" class="alert alert-success">{{success}}</div>
+
+<h1>Prodcut List</h1>
+<div id="theList">
+  <div class="list-group">
+    <div *ngFor="let items of prods;let i = index;">
+      
+      <div class="col-4" style="float:left">
+        <input type="text" [(ngModel)]="prods[i].prod_name"
+               class="form-control" required
+             
+               #prodName="ngModel"
+               [ngClass]="{ 'is-invalid': prodName.touched && prodName.invalid }">
+      </div>
+      <div class="col-4" style="float:left">
+        <input type="text"
+               [(ngModel)]="prods[i].prod_description"
+               class="form-control"
+               required
+               #prodsDesc="ngModel"
+               [ngClass]="{ 'is-invalid': prodsDesc.touched && prodsDesc.invalid }">
+      </div>
+
+
+      <div class="col-4" style="float:left">
+        <input type="text"
+               [(ngModel)]="prods[i].prod_price"
+               class="form-control"
+               required
+               #prodsPrice="ngModel"
+               [ngClass]="{ 'is-invalid': prodsPrice.touched && prodsPrice.invalid }">
+      </div>
+
+      <div class="col-4" style="float:left">
+        <input type="button"
+               value="Update"
+               class="btn btn-success btn-sm"
+               [disabled]="prodName.invalid || prodsDesc.invalid"
+               (click)="updateProds(prodName, prodsDesc,prodsPrice, items.id)">
+        &nbsp;
+        <input type="button"
+               value="Delete"
+               class="btn btn-danger btn-sm"
+               (click)="deleteProds(items.id)">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<h2> Add Products</h2>
+
+<div id="theForm">
+  
+  <form #f="ngForm" name="theForm" (submit)="addProds(f)">
+ 
+      <select [(ngModel)]="prod.cat_id" name="cat_id" id="cat_id"  #cat_id="ngModel">
+          <option [ngValue]="0">Select Category</option>
+          <option *ngFor="let item of catList;let i = index" [value]="catList[i].id">{{catList[i].catName}}</option>
+      </select>
+  
+
+    <div class="form-group">
+      <label>Product</label>
+      <input type="text" class="form-control" name="prodName" [(ngModel)]="prod.prodName"
+       #prodName="ngModel" required>
+      <span class="help-block danger" *ngIf="prodName.errors?.required && prodName.touched">
+        The Product name is required
+      </span>
+      <span class="help-block danger" *ngIf="prodName.errors?.pattern && prodName.touched">
+        The model name can only contain the letters a-z or A-Z
+      </span>
+    </div>
+  
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text"
+            class="form-control"
+            name="prodDesc"
+            required
+            [(ngModel)]="prod.prodDesc"
+            #prodDesc="ngModel">
+      <span class="help-block danger" *ngIf="prodDesc.errors?.required && prodDesc.touched">
+        The description is required
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label>Price</label>
+      <input type="text"
+            class="form-control"
+            name="prodPrice"
+            required
+            [(ngModel)]="prod.prodPrice"
+            #prodPrice="ngModel">
+      <span class="help-block danger" *ngIf="prodPrice.errors?.required && prodPrice.touched">
+        The description is required
+      </span>
+    </div>
+
+  
+    <button
+        class="btn btn-primary btn-sm"
+        [disabled]="f.invalid">Add</button>
+  </form>
+  

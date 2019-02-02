@@ -1,0 +1,44 @@
+<div *ngIf="error" class="alert alert-danger">{{error}}</div>
+<div *ngIf="success" class="alert alert-success">{{success}}</div>
+
+<div *ngIf="loginMessage" class="alert alert-success">
+   Welcome :  {{loginMessage}}
+</div>
+<div id="theForm">
+  
+  <form #f="ngForm" name="theForm" (submit)="loginValidate(f)">
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" class="form-control" name="emailId"
+[(ngModel)]="log.emailId"
+            #emailId="ngModel"
+            required>
+      <span class="help-block danger" *ngIf="emailId.errors?.required && emailId.touched">
+        The model name is required
+      </span>
+      <span class="help-block danger" *ngIf="emailId.errors?.pattern && emailId.touched">
+        The model name can only contain the letters a-z or A-Z
+      </span>
+    </div>
+  
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password"
+            class="form-control"
+            name="Password"
+            
+            required
+            [(ngModel)]="log.Password"
+            #Password="ngModel">
+      <span class="help-block danger" *ngIf="Password.errors?.required && Password.touched">
+        The description is required
+      </span>
+    </div>
+  
+    <button
+        class="btn btn-primary btn-sm"
+        [disabled]="f.invalid">Please Logn</button>
+  </form>
+  
+  
